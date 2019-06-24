@@ -34,7 +34,8 @@ var margin = {top: 20, right: 30, bottom: 30, left: 40},
     height = 500 - margin.top - margin.bottom;
 
 var x = d3.scaleBand()
-    .rangeRound([0, width], .1);
+			.rangeRound([0, width], .1)
+			.paddingInner(0.1);
 var y = d3.scaleLinear()
 			.range([height, 0]);
 
@@ -49,10 +50,9 @@ var chart = d3.select(".chart")
 
 d3.json("inbody.json")
 	.then(function(data){
-		<!-- x.domain(d3.map(data.inbody, function(d){ console.log(d.date); return d.date; })); -->
-		console.log(data.inbody);
-		console.log(typeof(data.inbody));
-		x.domain(d3.map(data.inbody, function(d){return d.date; }));
+		console.log(data);
+		console.log(typeof(data));
+		x.domain(data.inbody.map(function(d){return d.date;}));
 		y.domain(d3.extent(data.inbody, function(d){return d.weight;}));
 		chart.append("g")
 				.attr("class", "x axis")
@@ -71,10 +71,15 @@ d3.json("inbody.json")
 					
 		chart.selectAll(".bar")
 				.data(data.inbody)
-				.enter().append("rect")
-				.attr("x", function(d){return x(d.date);})
-				.attr("y", function(d){return y(d.weight);})
-				.attr("height", function(d){return height-y(d.weight);})
-				.attr("width", x.bandwidth());
+				.enter()
+				.append("rect")
+					.attr("x", function(d){return x(d.date);})
+					.attr("y", function(d){return y(d.weight);})
+					.attr("height", function(d){return height-y(d.weight);})
+					.attr("width", x.bandwidth())
+				.append("text")
+					.attr("x", function(d){return x(d.date);})
+					.attr("y", function(d){return y(d.weight+margin.top);})
+					.text(function(d){return d.weight;});
 	});
 </script>
