@@ -15,7 +15,7 @@
   shape-rendering: crispEdges;
 }
 .chart text {
-  fill: white;
+  fill: black;
   font: 10px sans-serif;
   text-anchor: end;
 }
@@ -50,8 +50,6 @@ var chart = d3.select(".chart")
 
 d3.json("inbody.json")
 	.then(function(data){
-		console.log(data);
-		console.log(typeof(data));
 		x.domain(data.inbody.map(function(d){return d.date;}));
 		y.domain(d3.extent(data.inbody, function(d){return d.weight;}));
 		chart.append("g")
