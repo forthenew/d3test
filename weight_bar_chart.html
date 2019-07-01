@@ -19,6 +19,9 @@
   font: 10px sans-serif;
   text-anchor: end;
 }
+.weight_text text{
+	text-anchor:middle
+}
 .line {
     fill: none;
     stroke: steelblue;
@@ -29,7 +32,7 @@
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 
-var margin = {top: 20, right: 30, bottom: 30, left: 40},
+var margin = {top: 20, right: 30, bottom: 50, left: 40},
 	width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -55,7 +58,12 @@ d3.json("inbody.json")
 		chart.append("g")
 				.attr("class", "x axis")
 				.attr("transform", "translate(0," + height + ")")
-				.call(xAxis);
+				.call(xAxis)
+				.selectAll("text")
+					.style("text-anchor", "end")
+					.attr("dx", "-.8em")
+					.attr("dy", ".15em")
+					.attr("transform", "rotate(-45)");
 
 		chart.append("g")
 				.attr("class", "y axis")
@@ -67,17 +75,24 @@ d3.json("inbody.json")
 					.style("text-anchor", "end")
 					.text("weight");
 					
-		chart.selectAll(".bar")
+		chart.append("g")
+				.selectAll("rect")
 				.data(data.inbody)
 				.enter()
 				.append("rect")
 					.attr("x", function(d){return x(d.date);})
 					.attr("y", function(d){return y(d.weight);})
 					.attr("height", function(d){return height-y(d.weight);})
-					.attr("width", x.bandwidth())
-				.append("text")
-					.attr("x", function(d){return x(d.date);})
-					.attr("y", function(d){return y(d.weight+margin.top);})
-					.text(function(d){return d.weight;});
+					.attr("width", x.bandwidth());
+
+		chart.append("g")
+				.attr("class", "weight_text")
+				.selectAll("text")					
+					.data(data.inbody)
+					.enter()
+					.append("text")
+						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
+						.attr("y", function(d){return y(d.weight+margin.top);})
+						.text(function(d){return d.weight;});
 	});
 </script>
