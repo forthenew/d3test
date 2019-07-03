@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-
 .chart rect {
   fill: steelblue;
 }
@@ -31,33 +30,34 @@
 <svg class="chart"></svg>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
-
 var margin = {top: 20, right: 30, bottom: 50, left: 40},
 	width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
+    height = 900 - margin.top - margin.bottom;
 var x = d3.scaleBand()
 			.rangeRound([0, width], .1)
 			.paddingInner(0.1);
 var y = d3.scaleLinear()
 			.range([height, 0]);
-
 var xAxis = d3.axisBottom(x);
 var yAxis = d3.axisLeft(y);
 var line = d3.line()
 				.x(function(d){return x(d.date)+x.bandwidth()/2;})
-				.y(function(d){return y(d.weight+margin.top);})
-
+				.y(function(d){return y(d.weight+margin.top);});
+var skeletal_muscle_mass_line = 	d3.line()
+										.x(function(d){return x(d.date)+x.bandwidth()/2;})
+										.y(function(d){return y(d.skeletal_muscle_mass+margin.top);});
+var body_fat_mass_line = 	d3.line()
+									.x(function(d){return x(d.date)+x.bandwidth()/2;})
+									.y(function(d){return y(d.body_fat_mass+margin.top);});
 var chart = d3.select(".chart")
 				.attr("width", width+margin.left+margin.right)
 				.attr("height", height+margin.top+margin.bottom)
 				.append("g")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
 d3.json("https://forthenew.github.io/d3test/inbody.json")
 	.then(function(data){
 		x.domain(data.inbody.map(function(d){return d.date;}));
-		y.domain(d3.extent(data.inbody, function(d){return d.weight;}));
+		y.domain([0, d3.max(data.inbody, function(d){return d.weight;})]);
 		chart.append("g")
 				.attr("class", "x axis")
 				.attr("transform", "translate(0," + height + ")")
@@ -67,7 +67,6 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 					.attr("dx", "-.8em")
 					.attr("dy", ".15em")
 					.attr("transform", "rotate(-45)");
-
 		chart.append("g")
 				.attr("class", "y axis")
 				.call(yAxis)
@@ -84,7 +83,6 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 					.attr("stroke", "blue")
 					.attr("stroke-width", "1.5px")
 					.attr("d", line(data.inbody));
-
 		chart.append("g")
 				.attr("class", "weight_text")
 				.selectAll("text")					
@@ -94,5 +92,37 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
 						.attr("y", function(d){return y(d.weight+margin.top);})
 						.text(function(d){return d.weight;});
+
+		chart.append("g")
+				.append("path")
+					.attr("fill", "none")
+					.attr("stroke", "pink")
+					.attr("stroke-width", "1.5px")
+					.attr("d", skeletal_muscle_mass_line(data.inbody));
+		chart.append("g")
+				.attr("class", "weight_text")
+				.selectAll("text")					
+					.data(data.inbody)
+					.enter()
+					.append("text")
+						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
+						.attr("y", function(d){return y(d.skeletal_muscle_mass+margin.top);})
+						.text(function(d){return d.skeletal_muscle_mass;});
+
+		chart.append("g")
+				.append("path")
+					.attr("fill", "none")
+					.attr("stroke", "red")
+					.attr("stroke-width", "1.5px")
+					.attr("d", body_fat_mass_line(data.inbody));
+		chart.append("g")
+				.attr("class", "weight_text")
+				.selectAll("text")					
+					.data(data.inbody)
+					.enter()
+					.append("text")
+						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
+						.attr("y", function(d){return y(d.body_fat_mass+margin.top);})
+						.text(function(d){return d.body_fat_mass;});
 	});
 </script>
