@@ -51,7 +51,7 @@ var chart = d3.select(".chart")
 				.append("g")
 					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("inbody.json")
+d3.json("https://forthenew.github.io/d3test/inbody.json")
 	.then(function(data){
 		x.domain(data.inbody.map(function(d){return d.date;}));
 		y.domain(d3.extent(data.inbody, function(d){return d.weight;}));
@@ -83,7 +83,8 @@ d3.json("inbody.json")
 					.attr("x", function(d){return x(d.date);})
 					.attr("y", function(d){return y(d.weight);})
 					.attr("height", function(d){return height-y(d.weight);})
-					.attr("width", x.bandwidth());
+					.attr("width", x.bandwidth())
+					.on("click", function(d){ return alert(d.weight);});
 
 		chart.append("g")
 				.attr("class", "weight_text")
