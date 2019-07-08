@@ -27,8 +27,14 @@
     stroke: steelblue;
     stroke-width: 3;
 }
+.index {
+	width: 100%;
+	text-align: center;
+	margin-top: 18px;
+}
 </style>
 <svg class="chart"></svg>
+<div class="index"><a href="./weight_line_chart.html">전체</a></div>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 
@@ -83,7 +89,8 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 					.attr("x", function(d){return x(d.date);})
 					.attr("y", function(d){return y(75.8);})
 					.attr("width", x.bandwidth())
-					.transition().duration(3000)
+					.transition()
+					.duration(function(d,i){return i*1000;})
 					.attr("x", function(d){return x(d.date);})
 					.attr("y", function(d){return y(d.weight);})
 					.attr("height", function(d){return height-y(d.weight);})
@@ -98,7 +105,7 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
 						.attr("y", function(d){return y(75.8);})
 						.transition()
-						.duration(3000)
+						.duration(function(d,i){return i*1000;})
 						.attr("x", function(d){return x(d.date)+x.bandwidth()/2;})
 						.attr("y", function(d){return y(d.weight+margin.top);})
 						.text(function(d){return d.weight;});
