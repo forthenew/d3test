@@ -26,8 +26,14 @@
     stroke: steelblue;
     stroke-width: 3;
 }
+.index {
+	width: 100%;
+	text-align: center;
+	margin-top: 18px;
+}
 </style>
 <svg class="chart"></svg>
+<div class="index"><a href="./weight_bar_chart.html">뒤로</a></div>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script>
 var margin = {top: 20, right: 30, bottom: 50, left: 40},
@@ -82,7 +88,9 @@ d3.json("https://forthenew.github.io/d3test/inbody.json")
 					.attr("fill", "none")
 					.attr("stroke", "blue")
 					.attr("stroke-width", "1.5px")
-					.attr("d", line(data.inbody));
+					.attr("d", line(data.inbody))
+					.on("click", function(){ return location.href="./weight_bar_chart.html"; })
+					.attr("cursor", "pointer");
 		chart.append("g")
 				.attr("class", "weight_text")
 				.selectAll("text")					
