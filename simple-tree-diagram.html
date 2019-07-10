@@ -84,9 +84,9 @@
 					.classed('node', true)
 					.attr('cx', function(d) {return d.x;})
 					.attr('cy', function(d) {return d.y;})
-					.attr('r', 4);
-
-			
+					.attr('r', 4)
+					.on("click", function(d){ alert(d.data.name);console.log(d);})
+					.attr("cursor","pointer");			
 		</script>
 	</body>
 </html>
