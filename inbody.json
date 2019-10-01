@@ -18,5 +18,7 @@
 		{"date":"2019-05-02", "weight":"77.1", "skeletal_muscle_mass":"38.0", "body_fat_mass":"10.5", "total_body_water":"48.9", "fat_free_mass":"66.5", "protein":"13.3", "mineral":"4.29"},
 		{"date":"2019-06-04", "weight":"77.4", "skeletal_muscle_mass":"38.0", "body_fat_mass":"10.5", "total_body_water":"48.9", "fat_free_mass":"66.5", "protein":"13.3", "mineral":"4.29"},
 		{"date":"2019-07-02", "weight":"77.0", "skeletal_muscle_mass":"38.0", "body_fat_mass":"10.5", "total_body_water":"48.9", "fat_free_mass":"66.5", "protein":"13.3", "mineral":"4.29"},
-                {"date":"2019-08-03", "weight":"76.3", "skeletal_muscle_mass":"38.1", "body_fat_mass":"9.9", "total_body_water":"48.8", "fat_free_mass":"66.4", "protein":"13.3", "mineral":"4.34"}
+                {"date":"2019-08-03", "weight":"76.3", "skeletal_muscle_mass":"38.1", "body_fat_mass":"9.9", "total_body_water":"48.8", "fat_free_mass":"66.4", "protein":"13.3", "mineral":"4.34"},
+		{"date":"2019-09-11", "weight":"77.1", "skeletal_muscle_mass":"37.3", "body_fat_mass":"11.8", "total_body_water":"48.1", "fat_free_mass":"65.3", "protein":"13.0", "mineral":"4.24"},
+		{"date":"2019-10-01", "weight":"76.5", "skeletal_muscle_mass":"37.3", "body_fat_mass":"11.2", "total_body_water":"47.9", "fat_free_mass":"65.3", "protein":"13.1", "mineral":"4.25"}
 		]}
