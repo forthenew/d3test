@@ -47,11 +47,11 @@
 <script>
 (function () {
     $(document).ready(function() {
-		var _margin={top:30, right:20, bottom:30, left:30},
+		var _margin={top:20, right:20, bottom:40, left:60},
 			_width=960-_margin.right-_margin.left,
 			_height=700-_margin.top-_margin.bottom,
 			_x_scale=d3.scaleLinear([1, 100], [1, _width])
-			_y_scale=d3.scaleLinear([100, 1], [1, _height]),
+			_y_scale=d3.scaleLinear([1, 100], [_height, 1]),
 			_x_axis=d3.axisBottom(_x_scale).ticks(20, 's'),
 			_y_axis=d3.axisLeft(_y_scale),
 			_svg = d3.select('#chart')
@@ -68,15 +68,33 @@
 				{name:'B', x:60,y:40}
 			];
 
+		// Add X axis
 		_svg.append('g')
 				.attr('class', 'x axis')
 				.attr('transform', 'translate(0, '+_height+')')
 				.call(_x_axis);
+		// Add Y axis
 		_svg.append('g')
 				.attr('class', 'y axis')
 				.attr('transform', 'translate(1, 0)')
 				.call(_y_axis);
 
+
+		// Add X axis Label
+		_svg.append('text')
+			.attr('text-anchor', 'end')
+			.attr('x', _width)
+			.attr('y', _height + _margin.top + 20)
+			.text('X axis title');
+
+		// Add Y axis Label
+		_svg.append('text')
+				.attr('text-anchor', 'end')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -_margin.top)
+				.attr('y', -_margin.left + 20)
+				.text('Y axis title');
+		
 		$.getJSON('https://forthenew.github.io/d3test/2dChart_data.json', function(data){
 			_data = data;
 			var items = [];
