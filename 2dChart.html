@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>D3 Test_2D chart</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		.axis {
+			shape-rendering: crispEdges;
+		}
+		.x.axis line {
+			stroke: #fff;
+		}
+		.circle {
+			stroke: red;
+			stroke-width:1px;
+		}
+		.text_name {
+			fill: red;
+		}
+		div.tooltip {
+			position: absolute;
+			text-align: center;
+			width: 60px;
+			height: 28px;
+			padding: 2px;
+			font: 12px sans-serif;
+			background: lightsteelblue;
+			border: 0px;
+			border-radius: 8px;
+			pointer-events: none;
+		}
+	</style>
+</head>
+<body>
+<svg id="chart"></svg>
+<table id="data_source">
+	<tr>
+		<td></td>
+		<td>name</td>
+		<td>x</td>
+		<td>y</td>
+	</tr>
+	<tbody></tbody>
+</table>
+<script>
+(function () {
+    $(document).ready(function() {
+		var _margin={top:30, right:20, bottom:30, left:30},
+			_width=960-_margin.right-_margin.left,
+			_height=700-_margin.top-_margin.bottom,
+			_x_scale=d3.scaleLinear([1, 100], [1, _width])
+			_y_scale=d3.scaleLinear([100, 1], [1, _height]),
+			_x_axis=d3.axisBottom(_x_scale).ticks(20, 's'),
+			_y_axis=d3.axisLeft(_y_scale),
+			_svg = d3.select('#chart')
+						.attr('width', _width+_margin.left+_margin.right)
+						.attr('height', _height+_margin.top+_margin.bottom)
+						.style('background-color', 'darkgray')
+					.append('g')
+						.attr('transform', 'translate('+_margin.left+','+_margin.top+')'),
+			_tooltip_div = d3.select("body").append("div")	
+								.attr("class", "tooltip")				
+								.style("opacity", 0)
+			_data=[
+				{name:'A', x:50,y:50},
+				{name:'B', x:60,y:40}
+			];
+
+		_svg.append('g')
+				.attr('class', 'x axis')
+				.attr('transform', 'translate(0, '+_height+')')
+				.call(_x_axis);
+		_svg.append('g')
+				.attr('class', 'y axis')
+				.attr('transform', 'translate(1, 0)')
+				.call(_y_axis);
+
+		$.getJSON('http://forthenew.github.io/d3test/2dChart_data.json', function(data){
+			_data = data;
+			var items = [];
+			$.each(data, function(key, val){
+				items.push('<tr><td><input type="checkbox" id='+val.id+' data-index='+key+'></td><td>'+val.name+'</td><td>'+val.prop_a+'</td><td>'+val.prop_b+'</td></tr>');
+			});
+			$("#data_source > tbody:last").append(items);
+			
+			$("input:checkbox").on('click', function(){
+				console.log($(this).data('index')+'          '+$(this).prop('id') + '        ' + $(this).is(':checked'));
+				/*
+				_data[$(this).data('index')].checked=$(this).is(':checked');
+				*/
+				if($(this).is(':checked')){
+					d3.select('#circle_'+$(this).prop('id')).style('visibility', 'visible');
+					d3.select('#text_'+$(this).prop('id')).style('visibility', 'visible');
+				} else {
+					d3.select('#circle_'+$(this).prop('id')).style('visibility', 'hidden');
+					d3.select('#text_'+$(this).prop('id')).style('visibility', 'hidden');
+				}
+			});
+			
+			
+			var p = _svg.append('g')
+					.selectAll('circle')
+					.data(_data);
+					/*
+					.data(_data.filter( function(d){ return d.checked; }));
+					*/
+					
+
+			p.enter()
+					.append('circle')
+						.attr('class', 'circle')
+						.attr('id', function(d, i){ return 'circle_'+d.id;})
+						.attr('cx', function(d, i){ return _x_scale(d.prop_a);})
+						.attr('cy', function(d, i){ return _y_scale(d.prop_b);})
+						.style('visibility', 'hidden')
+						.attr('r', '5')
+						.on('mouseover', function(d, i){ d3.select(this).attr('fill', 'yellow').attr('r', '10');
+															_tooltip_div.transition()
+																		.duration(200)
+																		.style("opacity", .9);
+															_tooltip_div.html(d.name+'<br/>'+d.prop_a+'<br/>'+d.prop_b)
+																		.style("left", (d3.event.pageX) + "px")		
+																		.style("top", (d3.event.pageY - 28) + "px");
+														})
+						.on('mouseout', function(d, i){ d3.select(this).attr('fill', 'red').attr('r', '5');
+														_tooltip_div.transition()
+																	.duration(500)
+																	.style('opacity', 0);
+														});
+
+			p.enter()
+					.append('text')
+						.attr('class', 'text_name')
+						.attr('id', function(d, i){ return 'text_'+d.id;})
+						.attr('x', function(d, i){ return _x_scale(d.prop_a)-6})
+						.attr('y', function(d, i){ return _y_scale(d.prop_b)-6})
+						.style('text-anchor', 'start')
+						.style('fill', 'red')
+						.style('visibility', 'hidden')
+						.text(function(d, i){ return d.name;});
+
+		
+		});
+
+		
+		
+	});
+}());
+</script>
+</body>
+</html>
