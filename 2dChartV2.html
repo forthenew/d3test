@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>D3 Test_2D chart</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		.axis line{
+			shape-rendering: crispEdges;
+			stroke: lightgrey;
+			stroke-opacity: 0.7;
+		}
+		/*
+		.x.axis line {
+			stroke: black;
+		}
+		*/
+		.circle {
+			stroke: red;
+			stroke-width:1px;
+		}
+		text {
+			
+			font-size: 10px;
+		}
+		div.tooltip {
+			position: absolute;
+			text-align: center;
+			width: 60px;
+			height: 28px;
+			padding: 2px;
+			font: 12px sans-serif;
+			background: lightsteelblue;
+			border: 0px;
+			border-radius: 8px;
+			pointer-events: none;
+		}
+	</style>
+</head>
+<body>
+<svg id="chart"></svg>
+<select id="ewg">
+	<option>ewg</option>
+	<option>O</option>
+	<option>X</option>
+</select>
+<select id="ewg1">
+	<option>ewg1</option>
+	<option>O</option>
+	<option>X</option>
+</select>
+<script>
+(function () {
+    $(document).ready(function() {
+		var _margin={top:20, right:20, bottom:40, left:60},
+			_width=960-_margin.right-_margin.left,
+			_height=700-_margin.top-_margin.bottom,
+			_x_scale=d3.scaleLinear([1, 100], [1, _width])
+			_y_scale=d3.scaleLinear([1, 100], [_height, 1]),
+			_x_axis=d3.axisBottom(_x_scale).tickSize(-_height),
+			_y_axis=d3.axisLeft(_y_scale).tickSize(-_width),
+			_svg = d3.select('#chart')
+						.attr('width', _width+_margin.left+_margin.right)
+						.attr('height', _height+_margin.top+_margin.bottom)
+						/*
+						.style('background-color', 'darkgray')
+						*/
+					.append('g')
+						.attr('transform', 'translate('+_margin.left+','+_margin.top+')'),
+			_tooltip_div = d3.select("body").append("div")	
+								.attr("class", "tooltip")				
+								.style("opacity", 0)
+			_data=[
+				{name:'A', x:50,y:50},
+				{name:'B', x:60,y:40}
+			];
+		// Add X axis
+		_svg.append('g')
+				.attr('class', 'x axis')
+				.attr('transform', 'translate(0, '+_height+')')
+				.call(_x_axis);
+		// Add Y axis
+		_svg.append('g')
+				.attr('class', 'y axis')
+				.attr('transform', 'translate(1, 0)')
+				.call(_y_axis);
+		// Add X axis Label
+		_svg.append('text')
+			.attr('text-anchor', 'end')
+			.attr('x', _width)
+			.attr('y', _height + _margin.top + 20)
+			.text('X axis title');
+		// Add Y axis Label
+		_svg.append('text')
+				.attr('text-anchor', 'end')
+				.attr('transform', 'rotate(-90)')
+				.attr('x', -_margin.top)
+				.attr('y', -_margin.left + 20)
+				.text('Y axis title');
+		
+		d3.json("2dChart_data.json")
+			.then(function(data){
+				_data = data.labs;
+				drawChart();
+			});
+			
+		function drawChart(cond){
+			var condi = '';
+			$('select option:selected').each(function(){
+				condi += 'd.'+$(this).attr('id') + '==' + $(this).text();
+			});
+			console.log(condi);
+			var filteredData = _data.filter(function(d){
+												return d.ewg == cond;
+											});
+			_svg
+				.append('g')
+					.attr('id', 'graphG')
+					.selectAll('g')
+						.data(filteredData, function(d){ return d.id;})
+						.enter()
+							.append('g')
+								.attr("class", "dotG")
+								.attr('transform', function(d, i){ 
+														return 'translate('+_x_scale(d.prop_a)+', '+_y_scale(d.prop_b)+')';
+												});
+			var dotG = _svg.selectAll("g.dotG");
+			dotG
+				.append('circle')
+					.attr('class', 'circle')
+					.attr('id', function(d, i){ return 'circle_'+d.id;})
+					.attr('r', '5')
+					.on('mouseover', highlight)
+					.on('mouseout', unHighlight);
+			dotG
+				.append('text')
+					.attr('id', function(d, i){ return 'text_'+d.id;})
+					.attr('y', function(d, i){ return 20;})
+					.style('text-anchor', 'middle')
+					.style('fill', 'red')
+					.text(function(d){ return d.name;});
+		}
+		function highlight(d,i){
+			d3.select(this)
+				.transition()
+				.duration(1000)
+				.attr('fill', 'yellow')
+				.attr('r', '10');
+			_tooltip_div.transition()
+						.duration(1000)
+						.style("opacity", .9);
+			_tooltip_div.html(d.name+'<br/>'+d.prop_a+'<br/>'+d.prop_b)
+						.style("left", (d3.event.pageX) + "px")		
+						.style("top", (d3.event.pageY - 28) + "px");
+		}
+		function unHighlight(){
+			d3.select(this)
+				.transition()
+				.duration(1000)
+				.attr('fill', 'red')
+				.attr('r', '5');
+			_tooltip_div.transition()
+						.duration(1000)
+						.style('opacity', 0);
+		}
+		function deleteChart(){
+			var dotG = _svg.selectAll("#graphG");
+			dotG
+				.data([])
+				.exit()
+				.remove();
+		}
+		$('#ewg').on('change', function(){
+			deleteChart();
+			drawChart($(this).val());
+		});
+		$('#ewg1').on('change', function(){
+			deleteChart();
+			drawChart($(this).val());
+		});
+	});
+}());
+</script>
+</body>
+</html>
