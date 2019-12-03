@@ -1,0 +1,32 @@
+{"code":"facial_care", "name":"페이셜 케어", "children":[
+	{"code":"labno", "name":"Lab no." },
+	{"code":"display", "name":"그래픽화", "children":[
+		{"code":"viscosity", "name":"점도" },
+		{"code":"hydrate", "name":"보습감" }
+	]},
+	{"code":"formula_base_information", "name":"처방 기본 정보", "children":[
+		{"code":"formula", "name":"처방", "children":[
+			{"code":"", "name":"구분"},
+			{"code":"", "name":"타입"},
+			{"code":"", "name":"단가"}
+		]},
+		{"code":"ingredient", "name":"성분", "children":[
+			{"code":"", "name":"EWG"},
+			{"code":"", "name":"화해" },
+			{"code":"", "name":"minimum" },
+			{"code":"", "name":"설페이트" },
+			{"code":"", "name":"자차종류" },
+			{"code":"", "name":"탈크함유" },
+			{"code":"", "name":"틴트함유" }
+		]},
+		{"code":"functionality", "name":"기능성", "children":[
+			{"code":"", "name":"미백" },
+			{"code":"", "name":"주름개선" },
+			{"code":"", "name":"SPF" },
+			{"code":"", "name":"PA" },
+			{"code":"", "name":"지속내수성" },
+			{"code":"", "name":"아크네" },
+			{"code":"", "name":"탈모" }
+		]}
+	]}
+]}
