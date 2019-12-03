@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dynamic Table</title>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		td {
+			border: 1px solid black;
+			width:100px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div id="table_"></div>
+<script>
+(function(){
+	d3.json("create_table_data.json")
+		.then(function(data){
+				drawTable(data);
+			});
+	function drawTable(data){
+		var tree = d3.hierarchy(data),
+			table = d3.select('#table_')
+						.append('table'),
+			maxDepth = d3.max(tree.descendants(), function(d){return d.depth;});
+		for(var i = 0; i < maxDepth; i++){
+			table.append('tr')
+					.selectAll('td')
+					.data(tree.descendants().filter(function(d){
+														if(d.depth == i+1) {
+															return d;
+														}
+													}))
+					.enter()
+					.append('td')
+						.attr('rowspan', function(d){ if(!d.children) return maxDepth-d.depth+1;})
+						.attr('colspan', function(d){ if(d.children) return d.descendants().length-1;})
+						.text(function(d){ return d.data.name; });			
+		}
+	}
+}());
+</script>
+</body>
+</html>
