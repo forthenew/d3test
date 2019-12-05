@@ -14,16 +14,67 @@
 	</style>
 </head>
 <body>
-<div id="table_"></div>
+<div id="filter_"></div>
+<div id="display_table"></div>
+<div id="base_table"></div>
 <script>
 (function(){
-	d3.json("create_table_data.json")
-		.then(function(data){
-				drawTable(data);
-			});
-	function drawTable(data){
+	d3.json("getListHeader.json")
+		.then(function(filter_data){
+			drawFilter(filter_data);
+			drawDisplayTable(filter_data);
+
+			d3.json("create_table_data.json")
+				.then(function(table_data){
+						drawBaseTable(table_data);
+				});
+		});
+	var filtering_data = [];
+	function drawFilter(data){
+		data.forEach(function(d){
+			if( d.isFilter ){
+				filtering_data.push(d);
+			}
+		});
+		
+		d3.select('#filter_')
+			.selectAll('select')
+				.data(filtering_data)
+				.enter()
+			.append('select')
+				.attr('id', function(d){return d.oid;})
+				.on('change', function(){
+					showSelectedValue();
+				})
+			.selectAll('option')
+				.data(function(d){
+					return d.defaultValue.split(',');
+				})
+				.enter()
+			.append('option')
+				.attr('value', function(d){return d;})
+				.text(function(d){return d;});
+	}
+
+	function drawDisplayTable(data){
+		var displayHeader = [];
+		data.forEach(function(d){
+			if(d.isListHeader) displayHeader.push(d);
+		});
+
+		d3.select('#display_table')
+			.append('table')
+			.append('tr')
+			.selectAll('td')
+				.data(displayHeader)
+				.enter()
+			.append('td')
+				.text(function(d){return d.name;});
+	}
+
+	function drawBaseTable(data){
 		var tree = d3.hierarchy(data),
-			table = d3.select('#table_')
+			table = d3.select('#base_table')
 						.append('table'),
 			maxDepth = d3.max(tree.descendants(), function(d){return d.depth;});
 		for(var i = 0; i < maxDepth; i++){
@@ -40,6 +91,11 @@
 						.attr('colspan', function(d){ if(d.children) return d.descendants().length-1;})
 						.text(function(d){ return d.data.name; });			
 		}
+	}
+	function showSelectedValue(){
+		$('select option:selected').each(function(){
+			console.log(this.value);
+		});
 	}
 }());
 </script>
