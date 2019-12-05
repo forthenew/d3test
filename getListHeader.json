@@ -1,0 +1,11 @@
+[
+	{"oid":1575020650764004,"code":"labno","name":"Lab no.","dataType":"문자","defaultValue":"0","isFilter":0,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272244014002,"code":"classification","name":"구분","dataType":"문자","defaultValue":"구분1,구분2,구분3","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272280215004,"code":"type","name":"타입","dataType":"문자","defaultValue":"A,B,C","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272305763006,"code":"cost","name":"단가","dataType":"문자","defaultValue":"초고가,고가,중가,저가","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":0,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272355559008,"code":"EWG","name":"EWG","dataType":"문자","defaultValue":"O,X","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":0,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272367453010,"code":"minimum","name":"minimum","dataType":"문자","defaultValue":"","isFilter":0,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272392867012,"code":"hawhae","name":"화해","dataType":"문자","defaultValue":"O,X","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272458011014,"code":"ewg","name":"EWG","dataType":"문자","defaultValue":"O,X","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70},
+	{"oid":1575272501902016,"code":"cost","name":"단가","dataType":"문자","defaultValue":"O,X","isFilter":1,"isShare":1,"isDisplay":0,"minValue":0.0,"maxValue":0.0,"isMandate":1,"isUse":1,"isListHeader":1,"headerWidth":70}
+]
