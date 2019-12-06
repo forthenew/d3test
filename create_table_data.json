@@ -28,5 +28,6 @@
 			{"code":"", "name":"아크네" },
 			{"code":"", "name":"탈모" }
 		]}
-	]}
+	]},
+	{"code":"export_info", "name":"수출정보" }
 ]}
